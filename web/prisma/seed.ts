@@ -10,8 +10,18 @@ async function main() {
     update: {},
     create: { email: 'test@example.com', password },
   });
-  await prisma.link.create({
+  const link1 = await prisma.link.create({
     data: { slug: 'hello', url: 'https://example.com', userId: user.id },
+  });
+  const link2 = await prisma.link.create({
+    data: { slug: 'docs', url: 'https://example.com/docs', userId: user.id },
+  });
+  await prisma.click.createMany({
+    data: [
+      { linkId: link1.id, ip: '127.0.0.1', userAgent: 'seed' },
+      { linkId: link1.id, ip: '127.0.0.1', userAgent: 'seed' },
+      { linkId: link2.id, ip: '127.0.0.1', userAgent: 'seed' },
+    ],
   });
 }
 
