@@ -1,0 +1,3 @@
+# Ensure svg and lock files use text diff
+*.svg text
+*.lock text
