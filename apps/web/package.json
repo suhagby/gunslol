@@ -24,6 +24,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
