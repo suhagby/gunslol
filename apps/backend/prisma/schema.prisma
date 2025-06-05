@@ -1,0 +1,39 @@
+// Prisma schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String?
+  name      String?
+  links     ShortLink[]
+  createdAt DateTime @default(now())
+}
+
+model ShortLink {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  url       String
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id])
+  clicks    Click[]
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+}
+
+model Click {
+  id        String   @id @default(cuid())
+  shortLink ShortLink @relation(fields: [shortLinkId], references: [id])
+  shortLinkId String
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
