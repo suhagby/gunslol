@@ -19,6 +19,7 @@ export default async function Dashboard() {
     include: { _count: { select: { clicks: true } } },
     orderBy: { createdAt: 'desc' },
   });
+  const links = await prisma.link.findMany({ where: { userId: user.id } });
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Your Links</h1>
@@ -40,6 +41,12 @@ export default async function Dashboard() {
               {link._count.clicks} clicks •{' '}
               {new Date(link.createdAt).toLocaleDateString()}
             </span>
+        {links.map((link: { id: string; slug: string; url: string }) => (
+          <li key={link.id} className="border p-2">
+            <a href={`/${link.slug}`} className="text-blue-600" target="_blank" rel="noopener noreferrer">
+              {link.slug}
+            </a>
+            <span className="ml-2 text-sm text-gray-500">{link.url}</span>
           </li>
         ))}
       </ul>

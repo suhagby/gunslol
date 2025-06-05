@@ -23,6 +23,9 @@ async function main() {
       { linkId: link2.id, ip: '127.0.0.1', userAgent: 'seed' },
     ],
   });
+  await prisma.link.create({
+    data: { slug: 'hello', url: 'https://example.com', userId: user.id },
+  });
 }
 
 main().catch(e => {

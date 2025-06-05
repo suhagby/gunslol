@@ -15,6 +15,7 @@ const createSchema = z.object({
     .max(32)
     .regex(/^[a-zA-Z0-9_-]+$/)
     .optional(),
+  slug: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
       );
     }
   }
+  const slug = parsed.data.slug || nanoid(6);
   const link = await prisma.link.create({
     data: {
       slug,

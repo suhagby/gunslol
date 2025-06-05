@@ -6,16 +6,22 @@ Simple URL shortener built with Next.js 14, Prisma and NextAuth.
 
 ```bash
 cd web
+main
 npm install
 npm run dev
 ```
 
 Configure environment variables by copying `.env.example` to `.env` and setting the values for your database connection string, `NEXTAUTH_SECRET` and OAuth provider keys.
 
+Configure environment variables by copying `.env.example` to `.env` and providing your database connection string and `NEXTAUTH_SECRET`.
+
 Run Prisma migrations:
 
 ```bash
+
 cd web
+=======
+main
 npx prisma migrate dev --name init
 ```
 
@@ -31,3 +37,7 @@ node prisma/seed.ts
 ## Deployment
 
 The app is ready to deploy on Vercel. Set the environment variables from `.env` in your project settings and run `vercel --prod`.
+
+node web/prisma/seed.ts
+
+
