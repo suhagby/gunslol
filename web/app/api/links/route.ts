@@ -9,6 +9,12 @@ const prisma = new PrismaClient();
 
 const createSchema = z.object({
   url: z.string().url(),
+  slug: z
+    .string()
+    .min(3)
+    .max(32)
+    .regex(/^[a-zA-Z0-9_-]+$/)
+    .optional(),
   slug: z.string().optional(),
 });
 
@@ -25,6 +31,16 @@ export async function POST(req: NextRequest) {
   const parsed = createSchema.safeParse(data);
   if (!parsed.success) {
     return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
+  }
+  let slug = parsed.data.slug || nanoid(6);
+  if (parsed.data.slug) {
+    const exists = await prisma.link.findUnique({ where: { slug } });
+    if (exists) {
+      return NextResponse.json(
+        { error: 'Slug already in use' },
+        { status: 400 }
+      );
+    }
   }
   const slug = parsed.data.slug || nanoid(6);
   const link = await prisma.link.create({
