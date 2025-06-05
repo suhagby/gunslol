@@ -12,6 +12,7 @@ server.register(cors);
 
 const createSchema = z.object({
   url: z.string().url(),
+
   slug: z
     .string()
     .min(3)
@@ -28,6 +29,9 @@ const shortenSchema = z.object({
     .max(32)
     .regex(/^[a-zA-Z0-9_-]+$/)
     .optional(),
+
+  slug: z.string().min(3).max(32).regex(/^[a-zA-Z0-9_-]+$/).optional(),
+
 });
 
 server.post<{ Body: CreateLinkInput }>('/links', async (req, reply) => {
@@ -49,6 +53,7 @@ server.post<{ Body: CreateLinkInput }>('/links', async (req, reply) => {
   });
   reply.send(link as ShortLink);
 });
+
 
 server.post('/api/shorten', async (req, reply) => {
   const parsed = shortenSchema.safeParse(req.body);
