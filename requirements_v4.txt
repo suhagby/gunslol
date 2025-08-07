@@ -1,0 +1,140 @@
+# SUHA FPS+ v4.0 - Neural Gaming Performance System Requirements
+# High-performance requirements for advanced AI and optimization features
+
+# Core System Libraries
+psutil>=5.9.0              # System and process monitoring
+numpy>=1.21.0              # Numerical computing for AI/ML
+scipy>=1.9.0               # Scientific computing libraries
+
+# AI/ML Libraries
+torch>=1.13.0              # PyTorch for neural networks
+torchvision>=0.14.0        # Computer vision for PyTorch
+scikit-learn>=1.1.0        # Machine learning algorithms
+pandas>=1.5.0              # Data analysis and manipulation
+
+# Async/Performance Libraries
+asyncio-extras>=1.3.2      # Enhanced asyncio utilities
+aiofiles>=22.1.0           # Async file operations
+aiohttp>=3.8.0             # Async HTTP client/server
+uvloop>=0.17.0             # High-performance event loop (Unix only)
+concurrent-futures>=3.1.1  # Enhanced concurrent execution
+
+# Web Framework & Real-time Communication
+Flask>=2.3.0               # Web framework for dashboard
+Flask-SocketIO>=5.3.0      # Real-time bidirectional communication
+Werkzeug>=2.3.0            # WSGI utilities
+Jinja2>=3.1.2              # Template engine
+
+# Discord Bot
+discord.py>=2.3.0          # Discord bot framework
+aiohttp>=3.8.0             # Required by discord.py
+
+# Data Visualization
+matplotlib>=3.6.0          # Plotting and graphing
+plotly>=5.15.0             # Interactive plots (optional)
+seaborn>=0.12.0            # Statistical visualization
+
+# Configuration & Serialization
+PyYAML>=6.0                # YAML configuration files
+toml>=0.10.2               # TOML configuration support
+configparser>=5.3.0        # INI configuration files
+python-dotenv>=1.0.0       # Environment variable management
+
+# Database & Caching
+sqlite3                    # Built-in with Python
+redis>=4.5.0               # Caching and message broker (optional)
+diskcache>=5.6.0           # Disk-based caching
+
+# System Integration
+pywin32>=305; sys_platform == "win32"     # Windows API access
+wmi>=1.5.1; sys_platform == "win32"      # Windows Management Instrumentation
+psutil>=5.9.0              # Cross-platform system monitoring
+
+# Network & Security
+requests>=2.28.0           # HTTP requests
+cryptography>=38.0.0       # Encryption and security
+certifi>=2022.0.0          # Certificate verification
+
+# Logging & Monitoring
+colorlog>=6.7.0            # Colored console logging
+structlog>=22.3.0          # Structured logging (optional)
+prometheus-client>=0.16.0  # Metrics collection (optional)
+
+# Development & Testing (optional)
+pytest>=7.2.0             # Testing framework
+pytest-asyncio>=0.21.0    # Async testing support
+black>=22.10.0             # Code formatting
+flake8>=6.0.0              # Code linting
+mypy>=1.0.0                # Type checking
+
+# Hardware Monitoring (optional)
+py3nvml>=0.2.7             # NVIDIA GPU monitoring
+pyadl>=0.1                 # AMD GPU monitoring (if available)
+opencl4py>=1.3.0           # OpenCL support (optional)
+
+# Additional Performance Libraries
+numba>=0.56.0              # JIT compilation for performance
+Cython>=0.29.0             # C extensions for Python
+lz4>=4.3.0                 # Fast compression
+orjson>=3.8.0              # Fast JSON serialization
+
+# Windows-Specific Performance Libraries (Windows only)
+pygetwindow>=0.0.9; sys_platform == "win32"  # Window management
+pyautogui>=0.9.54; sys_platform == "win32"   # GUI automation (optional)
+keyboard>=0.13.5; sys_platform == "win32"    # Global hotkeys (optional)
+mouse>=0.7.1; sys_platform == "win32"        # Mouse monitoring (optional)
+
+# Memory Profiling & Debugging (development)
+memory-profiler>=0.60.0    # Memory usage profiling
+line-profiler>=4.0.0       # Line-by-line profiling
+py-spy>=0.3.14             # Sampling profiler
+
+# Installation Notes:
+# =================
+# 
+# Basic Installation:
+# pip install -r requirements_v4.txt
+#
+# For development (includes all optional packages):
+# pip install -r requirements_v4.txt[dev]
+#
+# For Windows optimization features:
+# pip install -r requirements_v4.txt[windows]
+#
+# For AI/ML features only:
+# pip install torch torchvision scikit-learn numpy pandas matplotlib
+#
+# Hardware Requirements:
+# - CPU: Intel i5-8th gen / AMD Ryzen 5 3600 or better
+# - RAM: 8GB minimum, 16GB recommended
+# - Storage: 2GB free space for installation
+# - GPU: NVIDIA GTX 1060 / AMD RX 580 or better (for AI acceleration)
+# - OS: Windows 10/11, Ubuntu 20.04+, or compatible Linux distribution
+#
+# Performance Notes:
+# - PyTorch with CUDA support recommended for AI features
+# - uvloop provides significant performance boost on Linux/macOS
+# - Redis recommended for production deployments with multiple instances
+# - Windows version requires administrator privileges for optimizations
+#
+# Compatibility:
+# - Python 3.8+ required (3.10+ recommended)
+# - 64-bit architecture required
+# - Some features require specific hardware (NVIDIA GPU for CUDA)
+# - Windows-specific optimizations only work on Windows 10/11
+#
+# Optional Dependencies:
+# =====================
+# Install with: pip install "packagename[extra]"
+#
+# CUDA Support (NVIDIA GPUs):
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#
+# AMD ROCm Support (AMD GPUs):
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.4.2
+#
+# Production Deployment:
+# pip install gunicorn redis supervisor
+#
+# Development Tools:
+# pip install jupyter notebook ipython jupyterlab
