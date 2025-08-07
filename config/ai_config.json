@@ -1,0 +1,63 @@
+{
+    "version": "4.0.0",
+    "ai_engine": {
+        "enabled": true,
+        "learning_enabled": true,
+        "prediction_horizon_seconds": 60,
+        "confidence_threshold": 0.7,
+        "model_path": "models/neural_performance_v4.pth",
+        "neural_network": {
+            "input_size": 10,
+            "hidden_sizes": [64, 32, 16],
+            "output_size": 1,
+            "dropout_rate": 0.2,
+            "learning_rate": 0.001
+        }
+    },
+    "performance_optimizer": {
+        "enabled": true,
+        "max_workers": 8,
+        "auto_optimize": true,
+        "monitoring_interval": 1.0,
+        "optimization_threshold": {
+            "cpu_usage": 85,
+            "memory_usage": 90,
+            "temperature": 80,
+            "fps_min": 45
+        }
+    },
+    "windows_optimizer": {
+        "enabled": true,
+        "require_admin": true,
+        "gpu_scheduling": true,
+        "directstorage": true,
+        "memory_compression": true
+    },
+    "web_dashboard": {
+        "enabled": true,
+        "port": 5000,
+        "host": "localhost",
+        "theme": "neural_2040"
+    },
+    "discord_bot": {
+        "enabled": false,
+        "token": "",
+        "command_prefix": "!fps",
+        "channels": {
+            "alerts": null,
+            "status": null
+        }
+    },
+    "security": {
+        "api_rate_limit": 60,
+        "secure_mode": false,
+        "encryption_enabled": true
+    },
+    "logging": {
+        "level": "INFO",
+        "file_enabled": true,
+        "console_enabled": true,
+        "max_file_size": "10MB",
+        "backup_count": 5
+    }
+}
