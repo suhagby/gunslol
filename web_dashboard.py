@@ -187,7 +187,7 @@ class ComponentManager:
         return self.components.copy()
 
 # Create Flask app
-app = Flask(__name__)
+app = Flask(__name__, template_folder='web_templates')
 app.config['SECRET_KEY'] = 'suha_fps_neural_2040_enhanced'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -222,7 +222,74 @@ def add_log(message: str, level: str = 'info'):
 @app.route('/')
 def dashboard():
     """Main dashboard route."""
-    return render_template('enhanced_neural_interface.html')
+    # Check which template exists
+    templates_dir = Path('web_templates')
+    if (templates_dir / 'enhanced_neural_interface.html').exists():
+        return render_template('enhanced_neural_interface.html')
+    elif (templates_dir / 'neural_interface_2040.html').exists():
+        return render_template('neural_interface_2040.html')
+    else:
+        # Return a simple HTML page if no template found
+        return '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SUHA FPS+ v4.0 Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0a0a0a; color: #00ff88; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .status { background: #1a1a1a; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .metric { display: inline-block; margin: 10px 20px; }
+        .metric-value { font-size: 2em; font-weight: bold; }
+        .metric-label { font-size: 0.9em; opacity: 0.7; }
+    </style>
+    <script>
+        setInterval(function() {
+            fetch('/api/status')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.system) {
+                        document.getElementById('cpu').textContent = data.system.cpu.usage_percent.toFixed(1);
+                        document.getElementById('memory').textContent = data.system.memory.usage_percent.toFixed(1);
+                        document.getElementById('temp').textContent = (data.system.temperature || 0).toFixed(1);
+                    }
+                });
+        }, 2000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 SUHA FPS+ v4.0 Neural Dashboard</h1>
+            <p>Neural Gaming Performance System</p>
+        </div>
+        
+        <div class="status">
+            <div class="metric">
+                <div class="metric-value" id="cpu">--</div>
+                <div class="metric-label">CPU %</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="memory">--</div>
+                <div class="metric-label">Memory %</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="temp">--</div>
+                <div class="metric-label">Temperature °C</div>
+            </div>
+        </div>
+        
+        <div class="status">
+            <h3>🎮 System Status: Online</h3>
+            <p>Web dashboard is running successfully!</p>
+            <p>API Endpoint: <a href="/api/status">/api/status</a></p>
+            <p>Enhanced interface template will load when available.</p>
+        </div>
+    </div>
+</body>
+</html>
+        '''
 
 @app.route('/api/status')
 def api_status():
