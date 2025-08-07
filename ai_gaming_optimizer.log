@@ -1,0 +1,12 @@
+2025-08-07 15:39:48,480 - analyzers.ai_system_analyzer.AISystemAnalyzer - INFO - AI System Analyzer initialized
+2025-08-07 15:39:48,480 - ui.notifications - WARNING - No GUI notification methods available, using console
+2025-08-07 15:39:48,480 - ui.notifications - INFO - NotificationManager initialized with methods: ['console']
+2025-08-07 15:39:48,481 - ai_notification_manager.AINotificationManager - INFO - AI Notification Manager initialized
+2025-08-07 15:39:48,481 - analyzers.ai_system_analyzer.AISystemAnalyzer - INFO - Starting comprehensive system analysis...
+2025-08-07 15:39:50,526 - analyzers.ai_system_analyzer.AISystemAnalyzer - INFO - System analysis completed. Found 0 issues, 3 recommendations
+2025-08-07 15:39:50,526 - ai_notification_manager.AINotificationManager - INFO - Console notification: 🟢 Minor Performance Issues Detected - Some optimizations available to improve performance
+2025-08-07 15:39:50,526 - ai_notification_manager.AINotificationManager - INFO - Console notification: ⚡ 1 High-Priority Optimization Available - • Optimize Power Plan Settings
+2025-08-07 15:39:50,526 - ai_notification_manager.AINotificationManager - INFO - ✅ AI Analysis completed - Health Score: 100/100, Issues: 0, Recommendations: 3
+2025-08-07 15:39:50,526 - ai_notification_manager.AINotificationManager - INFO - Console notification: 🛑 Gaming Monitor Stopped - Performance monitoring stopped
+2025-08-07 15:39:50,527 - ai_notification_manager.AINotificationManager - INFO - INFO NOTIFICATION: 🛑 Gaming Monitor Stopped - Performance monitoring stopped
+2025-08-07 15:39:51,527 - ai_notification_manager.AINotificationManager - INFO - Notification system shutdown completed
