@@ -1,10 +1,51 @@
-.env
-node_modules/
-apps/**/dist
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+*.py[cod]
+*$py.class
 *.so
+
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Node modules (if any)
+node_modules/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Unit test / coverage reports
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Logs
+logs/
+*.log
+
+# AI Models and cache
+models/
+*.pth
+.ai_cache/
+
+# Temporary files
+temp/
+tmp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database files
 *.db
+*.sqlite3
+
+# SUHA FPS+ v4.0 specific
+ai_gaming_optimizer.log
