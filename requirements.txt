@@ -1,0 +1,102 @@
+# Gaming Performance Monitor Requirements
+# Optimized for Intel i7-9700K + RTX 3080 + 16GB RAM + M.2 SSD
+
+# Core System Monitoring
+psutil>=5.9.0              # System and process monitoring
+GPUtil>=1.4.0              # GPU monitoring (NVIDIA/AMD)
+py3nvml>=0.2.7             # NVIDIA GPU monitoring via NVML
+wmi>=1.5.1; sys_platform == "win32"  # Windows Management Instrumentation
+
+# Network Monitoring
+ping3>=4.0.0               # Network ping monitoring
+speedtest-cli>=2.1.3       # Internet speed testing
+requests>=2.28.0           # HTTP requests for network tests
+
+# GUI and Visualization
+tkinter-tools>=0.1.0       # Enhanced tkinter widgets (if available)
+matplotlib>=3.6.0          # Performance graphs and charts
+numpy>=1.21.0              # Numerical computing for data analysis
+
+# Configuration Management
+PyYAML>=6.0                # YAML configuration files
+configparser>=5.3.0        # INI configuration support
+
+# Notifications
+plyer>=2.1.0               # Cross-platform notifications
+win10toast>=0.9; sys_platform == "win32"  # Windows 10 toast notifications
+
+# Windows-specific Libraries
+pywin32>=304; sys_platform == "win32"     # Windows API access
+pywinutils>=0.1.0; sys_platform == "win32"  # Windows utilities (if available)
+
+# Database
+# Note: sqlite3 is included with Python standard library
+
+# Optional Performance Enhancements
+numba>=0.56.0              # JIT compilation for performance-critical code (optional)
+Cython>=0.29.0             # C extensions compilation (optional)
+
+# Development and Testing (optional)
+pytest>=7.0.0              # Unit testing framework
+pytest-cov>=4.0.0          # Code coverage
+black>=22.0.0              # Code formatting
+flake8>=5.0.0              # Code linting
+mypy>=0.991                # Type checking
+
+# Logging and Monitoring
+colorlog>=6.7.0            # Colored console logging
+watchdog>=2.1.0            # File system monitoring
+
+# System Integration
+schedule>=1.2.0            # Task scheduling
+click>=8.1.0               # Command line interface
+rich>=12.6.0               # Rich terminal output
+
+# Security
+cryptography>=38.0.0       # Encryption for sensitive data storage
+
+# Hardware-specific Monitoring (optional)
+# Note: These may require specific hardware or drivers
+opencl4py>=1.3.0           # OpenCL monitoring (optional)
+pycuda>=2022.1             # CUDA monitoring (optional)
+
+# Network Security and VPN Detection
+scapy>=2.4.5               # Network packet analysis (optional)
+
+# System Optimization Libraries
+winshell>=0.6; sys_platform == "win32"    # Windows shell operations
+win32-setctime>=1.1.0; sys_platform == "win32"  # File time operations
+
+# Data Analysis and Reporting
+pandas>=1.5.0              # Data analysis for performance reports
+seaborn>=0.12.0            # Statistical data visualization
+
+# Game Detection and Overlay (experimental)
+# Note: These are experimental and may not work with all games
+pymem>=1.8.0               # Memory reading for game detection (optional)
+keyboard>=0.13.5           # Global hotkey support (optional)
+mouse>=0.7.1               # Mouse monitoring (optional)
+
+# Installation Notes:
+# 1. Run as administrator on Windows for full functionality
+# 2. Some packages may require Visual C++ Build Tools on Windows
+# 3. NVIDIA drivers must be installed for GPU monitoring
+# 4. AMD GPU support requires additional drivers and may be limited
+# 5. Some optional packages may not be available on all platforms
+# 
+# Installation command:
+# pip install -r requirements.txt
+#
+# For development installation:
+# pip install -r requirements.txt[dev]
+#
+# Minimal installation (core functionality only):
+# pip install psutil PyYAML matplotlib tkinter
+
+# Version constraints explained:
+# - psutil>=5.9.0: Required for stable system monitoring
+# - matplotlib>=3.6.0: Needed for modern plotting features
+# - numpy>=1.21.0: Required for array operations and data processing
+# - PyYAML>=6.0: Needed for secure YAML loading
+# - py3nvml>=0.2.7: Latest NVIDIA monitoring support
+# - pywin32>=304: Latest Windows API support
