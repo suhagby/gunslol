@@ -1,0 +1,7 @@
+2025-08-07 17:38:12,596 - __main__ - INFO - Applying optimization profile: Safe Optimization
+2025-08-07 17:38:12,597 - ultimate_performance_optimizer - INFO - Applying profile: Competitive Gaming
+2025-08-07 17:38:12,597 - ultimate_performance_optimizer - WARNING - Registry optimizations require Windows admin privileges
+2025-08-07 17:38:12,597 - __main__ - INFO - Background monitoring started
+2025-08-07 17:38:12,597 - startup_optimizer - INFO - Game monitoring started
+2025-08-07 17:38:12,598 - startup_optimizer - INFO - Performance monitoring started
+2025-08-07 17:38:12,598 - startup_optimizer - INFO - Background services started
