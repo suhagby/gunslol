@@ -1,144 +1,241 @@
-# Gaming Performance Monitor
+# PC Gaming Performance Monitor & Optimizer
 
 A comprehensive 24/7 PC gaming performance monitoring and optimization system specifically designed for high-end gaming setups. This system continuously monitors system performance, detects issues, and applies automatic optimizations to maintain optimal gaming performance.
 
-## Target Hardware Configuration
+## 🎮 New Features
 
-This monitor is specifically optimized for:
-- **CPU**: Intel i7-9700K (8 cores, 8 threads)
-- **GPU**: NVIDIA RTX 3080 (10GB VRAM)
-- **RAM**: 16GB DDR4
-- **Storage**: M.2 NVMe SSD (7000MB/s)
-- **OS**: Windows 10/11
+### Web-Based Monitoring Dashboard
+- **Real-time monitoring** on a separate display
+- **Beautiful web interface** with live metrics
+- **Mobile-friendly** responsive design
+- **Auto-refresh** every 2 seconds
+- Access via: `http://localhost:5000`
 
-## Features
+### Enhanced Optimization Suite
+- **Advanced CPU optimization** with scheduler tuning
+- **Memory management** with cache optimization
+- **Network performance** tuning for gaming
+- **Process priority** management for games
+- **System cleanup** and maintenance tools
 
-### 🖥️ Real-time System Monitoring
-- **CPU Metrics**: Usage per core, temperatures, frequencies, boost states
-- **GPU Metrics**: Usage, VRAM, temperatures, clock speeds, power consumption
-- **Memory**: RAM usage, virtual memory, cache performance
-- **Storage**: I/O rates, disk usage, SSD health monitoring
-- **Temperatures**: CPU, GPU, and other system sensors
+### Easy-to-Use Launcher
+- **Interactive menu** system
+- **One-click optimizations**
+- **System status monitoring**
+- **Quick cleanup tools**
 
-### 🎮 Game Performance Analysis
-- **FPS Monitoring**: Real-time FPS, 1% low, 0.1% low calculations
-- **Frame Timing**: Frame time analysis, stutter detection
-- **Input Latency**: Estimated input lag measurement
-- **Game Detection**: Automatic detection of running games
-- **Performance Issues**: Automatic detection of FPS drops, stuttering
+## 🚀 Quick Start
 
-### 🌐 Network Performance Monitoring
-- **Latency**: Ping to gaming servers, jitter measurement
-- **Connectivity**: Packet loss detection, connection stability
-- **Bandwidth**: Download/upload speed testing
-- **DNS Performance**: DNS resolution time optimization
-- **Gaming Server Monitoring**: Specific game server ping monitoring
+### Option 1: Use the Launcher (Recommended)
+```bash
+python3 launcher.py
+```
 
-### ⚡ Automatic Optimizations
+### Option 2: Start Web Dashboard Directly
+```bash
+python3 web_dashboard.py
+```
+Then open `http://localhost:5000` on your secondary display.
 
-#### Windows System Optimizations
-- Game Mode activation and optimization
-- Windows Defender real-time scanning control
-- Background service management
-- Visual effects optimization for performance
-- Power plan optimization (High Performance)
-- Process priority management
-- Memory management optimization
+### Option 3: Run Enhanced Optimization
+```bash
+python3 enhanced_optimizer.py
+```
 
-#### Hardware-Specific Optimizations
-- **Intel i7-9700K**: Turbo Boost management, thermal control
-- **RTX 3080**: Power limit optimization, memory clock tuning
-- **DDR4 RAM**: XMP profile optimization, timing adjustments
-- **M.2 SSD**: TRIM optimization, write cache settings
+### Option 4: Full System Monitor
+```bash
+python3 main.py
+```
 
-#### Network Stack Optimizations
-- TCP/IP stack tuning for gaming
-- Nagle algorithm disable
-- DNS optimization (Cloudflare/Google DNS)
-- QoS gaming traffic prioritization
-- Network adapter optimization
-
-### 📊 Dashboard and Interface
-- **Real-time Dashboard**: Live performance metrics display
-- **Performance Graphs**: Historical data visualization
-- **System Information**: Detailed hardware information
-- **Optimization Controls**: Manual optimization triggers
-- **Issue Alerts**: Performance problem notifications
-- **Gaming Session Tracking**: Session-based performance analysis
-
-## Installation
+## 📦 Installation
 
 ### Prerequisites
-1. **Administrator Privileges**: Required for system optimizations
-2. **Windows 10/11**: Primary supported OS
-3. **Python 3.9+**: Required runtime
-4. **NVIDIA Drivers**: Latest drivers for RTX 3080 monitoring
+- **Linux/Windows**: Primary supported OS
+- **Python 3.9+**: Required runtime  
+- **Administrator/Root privileges**: Required for system optimizations
 
-### Quick Install
+### Install Dependencies
 ```bash
-# Install requirements
-pip install -r requirements.txt
+# Ubuntu/Debian
+sudo apt update
+sudo apt install -y python3-psutil python3-matplotlib python3-numpy python3-flask python3-yaml
 
-# Run the monitor
-python main.py
+# Or using pip (if apt packages not available)
+pip install psutil matplotlib numpy flask PyYAML
 ```
 
-## Usage
+## 🎯 Target Hardware Configuration
 
-### Starting the Monitor
-```bash
-# Basic start
-python main.py
+This system is optimized for:
+- **CPU**: Intel i7-9700K (8 cores, 8 threads) or similar
+- **GPU**: NVIDIA RTX 3080 (10GB VRAM) or equivalent
+- **RAM**: 16GB DDR4 or more
+- **Storage**: M.2 NVMe SSD (7000MB/s) 
+- **OS**: Windows 10/11 or Linux
 
-# With specific log level
-python main.py --log-level DEBUG
-```
+## 🌟 Features
 
-### Dashboard Interface
-1. **Overview Tab**: Real-time performance metrics and graphs
-2. **System Tab**: Detailed system monitoring
-3. **Game Tab**: Game-specific performance analysis
-4. **Network Tab**: Network performance monitoring
-5. **Optimizations Tab**: Manual optimization controls
+### Real-time System Monitoring
+- **CPU**: Usage per core, temperatures, frequencies, boost states
+- **GPU**: Usage, VRAM, temperatures, clock speeds, power consumption
+- **Memory**: RAM usage, virtual memory, cache performance
+- **Storage**: I/O rates, disk usage, SSD health monitoring
+- **Network**: Latency, bandwidth, packet loss monitoring
 
-## Configuration
+### Game Performance Analysis  
+- **FPS Monitoring**: Real-time FPS tracking and analysis
+- **Frame Timing**: Frame time analysis with stutter detection
+- **Input Latency**: Estimated input lag measurement
+- **Game Detection**: Automatic detection of running games
+- **Performance Issues**: Auto-detection of FPS drops and stuttering
 
-The system uses `config/settings.yaml` for configuration. Key settings include:
+### Automatic Optimizations
+
+#### System-Level Optimizations
+- CPU governor and frequency scaling optimization
+- Memory management parameter tuning
+- Disk I/O scheduler optimization for SSDs
+- Network TCP/IP stack optimization for gaming
+- Process priority management for gaming applications
+
+#### Gaming-Specific Optimizations  
+- Game Mode activation and optimization
+- Background service management during gaming
+- Visual effects optimization for performance
+- Power plan optimization (High Performance mode)
+- Real-time process priority adjustments
+
+### Web Dashboard Features
+- **Modern UI**: Dark theme with gaming aesthetics
+- **Real-time Metrics**: Live CPU, GPU, memory, and network stats
+- **Progress Bars**: Visual representation of system load
+- **Color Coding**: Green/Yellow/Red indicators for performance levels
+- **Responsive Design**: Works on tablets and secondary displays
+- **Auto-refresh**: Updates every 2 seconds automatically
+
+## 📊 Web Dashboard
+
+The web dashboard provides a beautiful, real-time monitoring interface perfect for secondary displays:
+
+- **System Overview**: CPU usage, temperature, and frequency
+- **GPU Monitoring**: Usage, VRAM, temperature tracking  
+- **Memory Status**: RAM usage with available memory display
+- **Storage I/O**: Disk usage and read/write speeds
+- **Network Performance**: Ping, download/upload speeds
+- **Gaming Metrics**: FPS, frame time, input lag (when gaming)
+
+### Dashboard Screenshots
+
+Access the dashboard at `http://localhost:5000` after starting the web dashboard.
+
+## 🔧 Configuration
+
+The system uses `config/settings.yaml` for configuration:
 
 ```yaml
 # Performance thresholds
 thresholds:
   min_fps: 60
-  target_fps: 120
+  target_fps: 120  
   max_cpu_temp: 85
   max_gpu_temp: 83
   max_memory_usage: 90
   max_ping: 50
+
+# Hardware-specific settings  
+hardware:
+  cpu:
+    model: "Intel i7-9700K"
+    enable_turbo_boost: true
+    power_profile: "high_performance"
+  gpu:
+    model: "NVIDIA RTX 3080"
+    power_limit: 100
+    enable_gpu_boost: true
 ```
 
-## Supported Games
+## 🎮 Supported Games
+
 - League of Legends
-- Counter-Strike 2  
-- Valorant
+- Counter-Strike 2
+- Valorant  
 - Fortnite
 - Call of Duty series
 - Apex Legends
 - Overwatch 2
 - Cyberpunk 2077
 - Elden Ring
+- And many more...
 
-## System Requirements
-- **Minimum**: Windows 10, 4GB RAM, Intel i5
-- **Recommended**: Windows 11, 8GB RAM, Intel i7
-- **Optimal**: Windows 11, 16GB RAM, Intel i7-9700K + RTX 3080
+## 📈 Performance Impact
 
-## Performance Impact
 - **CPU Usage**: <2% during normal monitoring
 - **Memory Usage**: <100MB typical
+- **Network**: Minimal bandwidth for web dashboard
 - **Disk Usage**: <1MB/day for metrics storage
 
-## License
+## 🛠️ Troubleshooting
+
+### Web Dashboard Not Loading
+```bash
+# Check if Flask is installed
+python3 -c "import flask; print('Flask OK')"
+
+# Check if port is available
+netstat -tulpn | grep :5000
+```
+
+### Optimization Not Working
+```bash
+# Check permissions
+sudo -v
+
+# Check system compatibility  
+uname -a
+python3 --version
+```
+
+### High System Usage
+```bash
+# Check running processes
+python3 launcher.py
+# Select option 4 for system status
+```
+
+## 🤝 Contributing
+
+This is an optimization system for PC gaming performance. Focus areas for improvement:
+
+- Additional hardware compatibility
+- More game-specific optimizations
+- Enhanced monitoring metrics
+- Better web dashboard features
+
+## 📄 License
 
 This project is licensed under the MIT License.
 
+---
+
+## 🚀 What's New in This Version
+
+### ✅ Repository Cleanup
+- **Removed**: Photography website and unrelated web applications  
+- **Removed**: URL shortener applications
+- **Removed**: Unnecessary Node.js dependencies
+- **Kept**: Core optimization and monitoring system
+
+### ✅ New Tools Added
+- **Web Dashboard**: Real-time monitoring for secondary displays
+- **Enhanced Optimizer**: Advanced system optimization beyond base system
+- **Interactive Launcher**: Easy-to-use menu system for all tools
+- **Quick System Status**: Instant performance overview
+
+### ✅ Improved Performance  
+- **Memory optimization**: Cache management and parameter tuning
+- **CPU optimization**: Scheduler and frequency scaling improvements  
+- **Network optimization**: TCP/IP stack tuning for gaming
+- **Process management**: Auto-prioritization of gaming applications
+
+The repository is now focused purely on PC optimization and monitoring, making it much cleaner and more efficient for its intended purpose.
 
