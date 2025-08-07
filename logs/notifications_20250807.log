@@ -1,0 +1,2 @@
+{"timestamp": "2025-08-07T16:00:18.247162", "severity": "warning", "category": "performance", "title": "Performance Alert: CPU", "message": "cpu is at 85.5% (threshold: 80.0)", "data": {"metric": "cpu", "current_value": 85.5, "threshold": 80.0, "percentage_over": 6.875000000000001}}
+{"timestamp": "2025-08-07T16:00:18.247409", "severity": "warning", "category": "game", "title": "\ud83c\udfae FPS Drop Detected", "message": "FPS dropped to 45 (target: 60) in Cyberpunk 2077", "data": {"current_fps": 45, "target_fps": 60, "game": "Cyberpunk 2077", "fps_drop_percentage": 25.0}}
