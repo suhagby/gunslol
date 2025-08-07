@@ -17,7 +17,7 @@ asyncio-extras>=1.3.2      # Enhanced asyncio utilities
 aiofiles>=22.1.0           # Async file operations
 aiohttp>=3.8.0             # Async HTTP client/server
 uvloop>=0.17.0             # High-performance event loop (Unix only)
-concurrent-futures>=3.1.1  # Enhanced concurrent execution
+# concurrent-futures>=3.1.1  # Built into Python 3.2+
 
 # Web Framework & Real-time Communication
 Flask>=2.3.0               # Web framework for dashboard
