@@ -23,6 +23,41 @@ try:
     HAS_PYTORCH = True
 except ImportError:
     HAS_PYTORCH = False
+    # Define dummy classes to prevent import errors
+    class nn:
+        class Module:
+            pass
+        @staticmethod
+        def Linear(*args, **kwargs):
+            pass
+        @staticmethod
+        def ReLU(*args, **kwargs):
+            pass
+        @staticmethod
+        def Dropout(*args, **kwargs):
+            pass
+        @staticmethod
+        def Sequential(*args, **kwargs):
+            pass
+        @staticmethod
+        def MSELoss(*args, **kwargs):
+            pass
+    
+    class torch:
+        @staticmethod
+        def tensor(*args, **kwargs):
+            pass
+        @staticmethod
+        def save(*args, **kwargs):
+            pass
+        @staticmethod
+        def load(*args, **kwargs):
+            pass
+    
+    class optim:
+        @staticmethod
+        def Adam(*args, **kwargs):
+            pass
 
 try:
     from sklearn.ensemble import IsolationForest
