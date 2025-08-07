@@ -1,0 +1,43 @@
+{
+    "app_name": "SUHA FPS+",
+    "version": "3.0.0",
+    "components": {
+        "ai_system": {
+            "enabled": true,
+            "learning_enabled": true,
+            "monitoring_interval": 30
+        },
+        "discord_bot": {
+            "enabled": false,
+            "token": "",
+            "notification_channel": null,
+            "auto_start": true
+        },
+        "web_dashboard": {
+            "enabled": true,
+            "port": 5000,
+            "host": "localhost",
+            "auto_launch_browser": false
+        },
+        "performance_monitor": {
+            "enabled": true,
+            "update_interval": 5,
+            "log_metrics": true
+        }
+    },
+    "settings": {
+        "auto_optimization": true,
+        "notification_level": "medium",
+        "log_level": "INFO",
+        "startup_delay": 3,
+        "auto_update_check": true
+    },
+    "thresholds": {
+        "cpu_warning": 75,
+        "cpu_critical": 90,
+        "memory_warning": 80,
+        "memory_critical": 95,
+        "temperature_warning": 75,
+        "temperature_critical": 85
+    }
+}

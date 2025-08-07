@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Enhanced Interactive launcher for the PC Gaming Performance Monitor.
-Now redirects to the Ultimate Gaming Launcher with all advanced features.
+SUHA FPS+ v3.0 Launcher Redirect
+Redirects to the new SUHA FPS+ launcher with all advanced features.
 """
 
 import os
@@ -13,33 +13,36 @@ def print_banner():
     """Print application banner."""
     banner = """
 ╔══════════════════════════════════════════════════════════════╗
-║              🎮 PC Gaming Performance Monitor 🎮             ║
-║                   Ultimate Launcher Redirect                 ║
+║                    🎮 SUHA FPS+ v3.0 🎮                     ║
+║              Next-Generation Gaming Optimizer               ║
+║                        Launcher Redirect                     ║
 ╚══════════════════════════════════════════════════════════════╝
     """
     print(banner)
 
 def main():
-    """Main entry point - redirect to ultimate launcher."""
+    """Main entry point - redirect to SUHA FPS+ launcher."""
     print_banner()
-    print("🚀 Starting Ultimate Gaming Performance Optimizer...")
+    print("🚀 Starting SUHA FPS+ v3.0...")
+    print("🤖 Advanced AI • 🎯 Discord Bot • 🌐 Web Dashboard")
+    print()
     
-    # Path to the ultimate launcher
+    # Path to the new SUHA FPS+ launcher
     project_root = Path(__file__).parent.absolute()
-    ultimate_launcher_path = project_root / 'ultimate_gaming_launcher.py'
+    suha_launcher_path = project_root / 'suha_fps_launcher.py'
     
-    if ultimate_launcher_path.exists():
+    if suha_launcher_path.exists():
         try:
-            # Launch the ultimate launcher
-            result = subprocess.run([sys.executable, str(ultimate_launcher_path)], 
+            # Launch the SUHA FPS+ launcher
+            result = subprocess.run([sys.executable, str(suha_launcher_path)], 
                                   cwd=str(project_root))
             return result.returncode
         except Exception as e:
-            print(f"❌ Error launching ultimate launcher: {e}")
+            print(f"❌ Error launching SUHA FPS+: {e}")
             return 1
     else:
         # Fallback to basic menu
-        print("⚠️ Ultimate launcher not found, using basic launcher...")
+        print("⚠️ SUHA FPS+ launcher not found, using basic launcher...")
         return basic_launcher()
 
 def basic_launcher():
