@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUHA FPS+ v4.0 - Neural Gaming Performance Dashboard</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    
+    <style>
+        :root {
+            --primary-neon: #00ff88;
+            --secondary-neon: #0088ff;
+            --accent-neon: #ff0088;
+            --warning-neon: #ffaa00;
+            --background-dark: #0a0a0a;
+            --background-panel: rgba(16, 16, 32, 0.95);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-glow: rgba(0, 255, 136, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 136, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Neural Network Animation */
+        .neural-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Header */
+        .header {
+            background: var(--background-panel);
+            border-bottom: 2px solid var(--border-glow);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px var(--primary-neon);
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2); }
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-neon);
+            box-shadow: 0 0 10px var(--primary-neon);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        /* Main Layout */
+        .main-container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 2rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Panel Base Styles */
+        .panel {
+            background: var(--background-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .panel:hover::before {
+            left: 100%;
+        }
+
+        .panel:hover {
+            border-color: var(--primary-neon);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(0, 255, 136, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .panel h2 {
+            color: var(--primary-neon);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* System Overview */
+        .system-overview {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 0;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        .metric-card {
+            background: var(--background-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-neon);
+            margin: 0.5rem 0;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* Component Status */
+        .component-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .component-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .component-item:last-child {
+            border-bottom: none;
+        }
+
+        .component-name {
+            font-weight: bold;
+        }
+
+        .component-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .status-running {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary-neon);
+            border: 1px solid var(--primary-neon);
+        }
+
+        .status-stopped {
+            background: rgba(255, 0, 136, 0.2);
+            color: var(--accent-neon);
+            border: 1px solid var(--accent-neon);
+        }
+
+        .status-warning {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning-neon);
+            border: 1px solid var(--warning-neon);
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* 3D Visualization */
+        .threejs-container {
+            position: relative;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.3s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--accent-neon), #ff4444);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, var(--warning-neon), #ffcc44);
+        }
+
+        /* Logs */
+        .log-container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem;
+            border-radius: 4px;
+        }
+
+        .log-info { color: var(--text-secondary); }
+        .log-success { color: var(--primary-neon); }
+        .log-warning { color: var(--warning-neon); }
+        .log-error { color: var(--accent-neon); }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-neon);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Canvas Background -->
+    <canvas id="neuralCanvas" class="neural-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🤖 SUHA FPS+ v4.0 Neural Dashboard</h1>
+        <div class="status-indicator">
+            <div class="status-dot" id="connectionStatus"></div>
+            <span id="connectionText">Connected</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- System Overview -->
+        <section class="system-overview">
+            <div class="metric-card">
+                <div class="metric-value" id="cpuUsage">--</div>
+                <div class="metric-label">CPU Usage %</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="memoryUsage">--</div>
+                <div class="metric-label">Memory Usage %</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="gpuUsage">--</div>
+                <div class="metric-label">GPU Usage %</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="fpsCounter">--</div>
+                <div class="metric-label">Current FPS</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="temperature">--</div>
+                <div class="metric-label">Temperature °C</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeComponents">--</div>
+                <div class="metric-label">Active Components</div>
+            </div>
+        </section>
+
+        <!-- Component Status -->
+        <section class="panel">
+            <h2>🔧 Component Status</h2>
+            <ul class="component-list" id="componentList">
+                <!-- Components will be populated dynamically -->
+            </ul>
+            <div class="controls">
+                <button class="btn" onclick="startAllComponents()">🚀 Start All</button>
+                <button class="btn btn-warning" onclick="restartAllComponents()">🔄 Restart All</button>
+                <button class="btn btn-danger" onclick="stopAllComponents()">🛑 Stop All</button>
+            </div>
+        </section>
+
+        <!-- Performance Chart -->
+        <section class="panel">
+            <h2>📊 Performance Metrics</h2>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="toggleChart('cpu')">CPU</button>
+                <button class="btn" onclick="toggleChart('memory')">Memory</button>
+                <button class="btn" onclick="toggleChart('gpu')">GPU</button>
+                <button class="btn" onclick="toggleChart('fps')">FPS</button>
+            </div>
+        </section>
+
+        <!-- 3D Visualization -->
+        <section class="panel">
+            <h2>🎮 Neural Performance Matrix</h2>
+            <div class="threejs-container" id="threejsContainer"></div>
+            <div class="controls">
+                <button class="btn" onclick="resetVisualization()">🔄 Reset View</button>
+                <button class="btn" onclick="toggleAnimation()">⏯️ Toggle Animation</button>
+            </div>
+        </section>
+
+        <!-- AI Recommendations -->
+        <section class="panel">
+            <h2>🧠 AI Recommendations</h2>
+            <div id="aiRecommendations">
+                <div class="log-entry log-info">AI engine initializing...</div>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="requestAIAnalysis()">🔍 Analyze Performance</button>
+                <button class="btn" onclick="applyAIOptimizations()">⚡ Apply Optimizations</button>
+            </div>
+        </section>
+
+        <!-- System Logs -->
+        <section class="panel">
+            <h2>📝 System Logs</h2>
+            <div class="log-container" id="systemLogs">
+                <!-- Logs will be populated dynamically -->
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="clearLogs()">🗑️ Clear</button>
+                <button class="btn" onclick="downloadLogs()">💾 Download</button>
+                <button class="btn" onclick="toggleAutoScroll()">📜 Auto-scroll</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global variables
+        let socket;
+        let performanceChart;
+        let scene, camera, renderer;
+        let animationId;
+        let isAnimating = true;
+        let autoScroll = true;
+        let chartData = {
+            cpu: [],
+            memory: [],
+            gpu: [],
+            fps: [],
+            timestamps: []
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSocketConnection();
+            initializeChart();
+            initialize3DVisualization();
+            initializeNeuralBackground();
+            startDataCollection();
+        });
+
+        // Socket.IO Connection
+        function initializeSocketConnection() {
+            socket = io();
+            
+            socket.on('connect', function() {
+                updateConnectionStatus(true);
+                addLogEntry('Connected to SUHA FPS+ system', 'success');
+            });
+
+            socket.on('disconnect', function() {
+                updateConnectionStatus(false);
+                addLogEntry('Disconnected from system', 'warning');
+            });
+
+            socket.on('status_update', function(data) {
+                updateDashboard(data);
+            });
+
+            socket.on('log_entry', function(data) {
+                addLogEntry(data.message, data.level);
+            });
+
+            socket.on('ai_recommendation', function(data) {
+                addAIRecommendation(data);
+            });
+        }
+
+        // Update connection status
+        function updateConnectionStatus(connected) {
+            const statusDot = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('connectionText');
+            
+            if (connected) {
+                statusDot.style.background = 'var(--primary-neon)';
+                statusText.textContent = 'Connected';
+            } else {
+                statusDot.style.background = 'var(--accent-neon)';
+                statusText.textContent = 'Disconnected';
+            }
+        }
+
+        // Update dashboard with real-time data
+        function updateDashboard(data) {
+            // Update system metrics
+            document.getElementById('cpuUsage').textContent = data.cpu_usage?.toFixed(1) || '--';
+            document.getElementById('memoryUsage').textContent = data.memory_usage?.toFixed(1) || '--';
+            document.getElementById('gpuUsage').textContent = data.gpu_usage?.toFixed(1) || '--';
+            document.getElementById('fpsCounter').textContent = data.fps || '--';
+            document.getElementById('temperature').textContent = data.temperature?.toFixed(1) || '--';
+            
+            // Update component status
+            updateComponentList(data.components || {});
+            
+            // Update chart
+            updateChart(data);
+            
+            // Update 3D visualization
+            update3DVisualization(data);
+        }
+
+        // Update component list
+        function updateComponentList(components) {
+            const componentList = document.getElementById('componentList');
+            const activeCount = Object.values(components).filter(c => c.running).length;
+            
+            document.getElementById('activeComponents').textContent = activeCount;
+            
+            componentList.innerHTML = '';
+            
+            Object.entries(components).forEach(([name, component]) => {
+                const li = document.createElement('li');
+                li.className = 'component-item';
+                
+                const statusClass = component.running ? 'status-running' : 'status-stopped';
+                const statusText = component.running ? 'ONLINE' : 'OFFLINE';
+                
+                li.innerHTML = `
+                    <span class="component-name">${name.replace('_', ' ').toUpperCase()}</span>
+                    <span class="component-status ${statusClass}">${statusText}</span>
+                `;
+                
+                componentList.appendChild(li);
+            });
+        }
+
+        // Chart initialization
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CPU Usage',
+                        data: [],
+                        borderColor: 'rgba(0, 255, 136, 1)',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Memory Usage',
+                        data: [],
+                        borderColor: 'rgba(0, 136, 255, 1)',
+                        backgroundColor: 'rgba(0, 136, 255, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'GPU Usage',
+                        data: [],
+                        borderColor: 'rgba(255, 0, 136, 1)',
+                        backgroundColor: 'rgba(255, 0, 136, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update chart with new data
+        function updateChart(data) {
+            const now = new Date().toLocaleTimeString();
+            
+            // Add new data
+            chartData.timestamps.push(now);
+            chartData.cpu.push(data.cpu_usage || 0);
+            chartData.memory.push(data.memory_usage || 0);
+            chartData.gpu.push(data.gpu_usage || 0);
+            chartData.fps.push(data.fps || 0);
+            
+            // Keep only last 20 data points
+            const maxDataPoints = 20;
+            if (chartData.timestamps.length > maxDataPoints) {
+                chartData.timestamps.shift();
+                chartData.cpu.shift();
+                chartData.memory.shift();
+                chartData.gpu.shift();
+                chartData.fps.shift();
+            }
+            
+            // Update chart
+            performanceChart.data.labels = chartData.timestamps;
+            performanceChart.data.datasets[0].data = chartData.cpu;
+            performanceChart.data.datasets[1].data = chartData.memory;
+            performanceChart.data.datasets[2].data = chartData.gpu;
+            performanceChart.update('none');
+        }
+
+        // 3D Visualization initialization
+        function initialize3DVisualization() {
+            const container = document.getElementById('threejsContainer');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            renderer.setClearColor(0x000000, 0.1);
+            container.appendChild(renderer.domElement);
+            
+            // Create neural network visualization
+            createNeuralNetwork();
+            
+            camera.position.z = 5;
+            
+            // Animation loop
+            animate3D();
+        }
+
+        // Create neural network visualization
+        function createNeuralNetwork() {
+            const geometry = new THREE.SphereGeometry(0.05, 8, 8);
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff88 });
+            
+            // Create nodes
+            for (let i = 0; i < 50; i++) {
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: Math.random() > 0.5 ? 0x00ff88 : 0x0088ff 
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                
+                sphere.position.set(
+                    (Math.random() - 0.5) * 8,
+                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 4
+                );
+                
+                scene.add(sphere);
+                
+                // Add connections
+                if (Math.random() > 0.7) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                        sphere.position,
+                        new THREE.Vector3(
+                            (Math.random() - 0.5) * 8,
+                            (Math.random() - 0.5) * 6,
+                            (Math.random() - 0.5) * 4
+                        )
+                    ]);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    scene.add(line);
+                }
+            }
+        }
+
+        // 3D Animation loop
+        function animate3D() {
+            if (isAnimating) {
+                animationId = requestAnimationFrame(animate3D);
+                
+                scene.rotation.x += 0.005;
+                scene.rotation.y += 0.01;
+                
+                renderer.render(scene, camera);
+            }
+        }
+
+        // Update 3D visualization based on performance data
+        function update3DVisualization(data) {
+            // Update node colors based on performance
+            scene.children.forEach((child, index) => {
+                if (child.type === 'Mesh') {
+                    const performance = (data.cpu_usage + data.memory_usage + data.gpu_usage) / 3;
+                    if (performance > 80) {
+                        child.material.color.setHex(0xff0088); // Red for high usage
+                    } else if (performance > 50) {
+                        child.material.color.setHex(0xffaa00); // Yellow for medium usage
+                    } else {
+                        child.material.color.setHex(0x00ff88); // Green for low usage
+                    }
+                }
+            });
+        }
+
+        // Neural background canvas
+        function initializeNeuralBackground() {
+            const canvas = document.getElementById('neuralCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const nodes = [];
+            const connections = [];
+            
+            // Create nodes
+            for (let i = 0; i < 50; i++) {
+                nodes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 3 + 1
+                });
+            }
+            
+            function drawNeuralNetwork() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update and draw nodes
+                nodes.forEach(node => {
+                    node.x += node.vx;
+                    node.y += node.vy;
+                    
+                    if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                    if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 255, 136, 0.6)';
+                    ctx.fill();
+                });
+                
+                // Draw connections
+                nodes.forEach((node, i) => {
+                    nodes.slice(i + 1).forEach(otherNode => {
+                        const distance = Math.sqrt(
+                            Math.pow(node.x - otherNode.x, 2) + 
+                            Math.pow(node.y - otherNode.y, 2)
+                        );
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(node.x, node.y);
+                            ctx.lineTo(otherNode.x, otherNode.y);
+                            ctx.strokeStyle = `rgba(0, 255, 136, ${0.1 - distance / 1000})`;
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(drawNeuralNetwork);
+            }
+            
+            drawNeuralNetwork();
+        }
+
+        // Component control functions
+        function startAllComponents() {
+            fetch('/api/components/start-all', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    addLogEntry('Starting all components...', 'info');
+                });
+        }
+
+        function stopAllComponents() {
+            fetch('/api/components/stop-all', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    addLogEntry('Stopping all components...', 'warning');
+                });
+        }
+
+        function restartAllComponents() {
+            fetch('/api/components/restart-all', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    addLogEntry('Restarting all components...', 'info');
+                });
+        }
+
+        // AI functions
+        function requestAIAnalysis() {
+            fetch('/api/ai/analyze', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    addLogEntry('AI analysis requested...', 'info');
+                });
+        }
+
+        function applyAIOptimizations() {
+            fetch('/api/ai/optimize', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    addLogEntry('Applying AI optimizations...', 'success');
+                });
+        }
+
+        // Utility functions
+        function addLogEntry(message, level = 'info') {
+            const logsContainer = document.getElementById('systemLogs');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${level}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            logsContainer.appendChild(entry);
+            
+            if (autoScroll) {
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+            }
+        }
+
+        function addAIRecommendation(recommendation) {
+            const container = document.getElementById('aiRecommendations');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry log-success';
+            entry.textContent = `🧠 ${recommendation.message} (Confidence: ${recommendation.confidence}%)`;
+            
+            container.appendChild(entry);
+        }
+
+        function clearLogs() {
+            document.getElementById('systemLogs').innerHTML = '';
+        }
+
+        function downloadLogs() {
+            const logs = document.getElementById('systemLogs').textContent;
+            const blob = new Blob([logs], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `suha-fps-logs-${new Date().toISOString()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            const btn = event.target;
+            btn.textContent = autoScroll ? '📜 Auto-scroll' : '📜 Manual';
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            if (isAnimating) {
+                animate3D();
+            }
+        }
+
+        function resetVisualization() {
+            scene.rotation.set(0, 0, 0);
+            camera.position.set(0, 0, 5);
+        }
+
+        function toggleChart(type) {
+            // Toggle chart dataset visibility
+            const dataset = performanceChart.data.datasets.find(d => 
+                d.label.toLowerCase().includes(type)
+            );
+            if (dataset) {
+                dataset.hidden = !dataset.hidden;
+                performanceChart.update();
+            }
+        }
+
+        // Start periodic data collection
+        function startDataCollection() {
+            setInterval(() => {
+                if (socket && socket.connected) {
+                    socket.emit('request_status');
+                }
+            }, 1000);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('threejsContainer');
+            camera.aspect = container.offsetWidth / container.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            
+            const canvas = document.getElementById('neuralCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

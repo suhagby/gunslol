@@ -1,0 +1,21 @@
+{
+  "ai_engine_enabled": true,
+  "performance_optimizer_enabled": true,
+  "windows_optimizer_enabled": true,
+  "web_dashboard_enabled": true,
+  "discord_bot_enabled": false,
+  "neural_launcher_enabled": true,
+  "web_dashboard_port": 5000,
+  "api_port": 5001,
+  "websocket_port": 5002,
+  "ai_learning_enabled": true,
+  "ai_prediction_horizon": 60,
+  "ai_model_path": "models/neural_performance_v4.pth",
+  "performance_monitoring_interval": 1.0,
+  "auto_optimization_enabled": true,
+  "max_workers": 8,
+  "discord_bot_token": null,
+  "api_rate_limit": 60,
+  "secure_mode": false,
+  "require_admin": false
+}
